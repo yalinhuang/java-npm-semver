@@ -36,7 +36,7 @@ dependencies {
 }
 
 ext {
-	pomFile = file("${project.projectDir}/tmp/pom.xml")
+	pomFile = file("${project.buildDir}/tmp/pom.xml")
 }
 
 configurations {
