@@ -3,6 +3,12 @@ Java _npm_ SemVer
 
 This is a direct port [`node-semver`](https://github.com/npm/node-semver), great to have npm like semantics in a Java application.
 
+Pending Updates on this README
+------------------------------
+
+- [ ] Update link to Maven Central after release of v1.1.0
+- [ ] Update `groupId` and `version` in Maven/Gradle configuration
+
 Releases
 --------
 
@@ -107,15 +113,25 @@ version.stream().filter(range::test); // { "4.2.0" }
 ```
 
 
-Publishing
-----------
+Build and Publishing
+--------------------
 
+This project has enabled continuous build on [Travis CI](https://travis-ci.com/yalinhuang/java-npm-semver).
+The project leverages Gradle and Nebula plug-ins for building, testing, and publishing.
+The build script is tracked under `gradle/buildViaTravis.sh` while a release is triggered by GIT tags.
+
+#### Unit testing
+```console
+$ ./gradlew clean check
 ```
-$ trash build
-$ trash tmp
-$ mkdir tmp
-$ gradle clean preparePublish publish
-$ gradle clean preparePublish publish # yes you need to launch it twice
+
+#### Publish to local repository for integration testing
+```console
+$ ./gradlew devSnapshot publishToMavenLocal
+
+> Configure project :
+Inferred project: npm-semver, version: 1.1.0-dev.11+9afcf6c
+...
 ```
 
 
