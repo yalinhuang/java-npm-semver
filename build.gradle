@@ -52,60 +52,26 @@ artifacts {
 	}
 }
 
-task signJars (type: Sign, dependsOn: [jar, javadocJar, sourceJar]) {
-	sign configurations.archives
-}
-
-task signPom(type: Sign) {
-	if (pomFile.exists()) {
-		sign configurations.pom
-	}
-}
-
-task preparePublish(dependsOn: [signJars, signPom])
-
-def getPomSignatures = {
-	if (!project.ext.pomFile.exists()) {
-		return [];
+signing {
+	required {
+		if (publishToMavenLocal) {
+			System.console().printf "  [Disabled] Artifacts are not signed when published locally\n"
+			false
+		}
+		else {
+			def signingKey = findProperty("signingKey")
+			def signingPassword = findProperty("signingPassword")
+			useInMemoryPgpKeys(signingKey, signingPassword)
+			true
+		}
 	}
 
-	return [
-		[
-			archive: project.tasks.signPom.signatureFiles.collect{it}[0],
-			classifier: null,
-			extension: 'pom.asc'
-		]
-	];
-}
-
-def getJarsSignatures = {
-	def allFiles = project.tasks.signJars.signatureFiles.collect { it }
-	def signedSources = allFiles.find { it.name.contains('-sources') }
-	def signedJavadoc = allFiles.find { it.name.contains('-javadoc') }
-	def signedJar = (allFiles - [signedSources, signedJavadoc])[0]
-	return [
-		[archive: signedSources, classifier: 'sources', extension: 'jar.asc'],
-		[archive: signedJavadoc, classifier: 'javadoc', extension: 'jar.asc'],
-		[archive: signedJar, classifier: null, extension: 'jar.asc']
-	]
+	sign publishing.publications
 }
 
 publishing {
 	publications {
 		nebula(MavenPublication) {
-			pom.withXml {
-				asNode().children().each {node ->
-					if (node.name() == 'properties') {
-						node.children().each {prop ->
-							if (prop.name() == 'nebula_Build_Date') {
-								println 'Removing nasty build date!'
-								prop.setValue('')
-							}
-						}
-					}
-				}
-			}
-
 			pom.withXml {
 				asNode().children().last() + {
 					resolveStrategy = Closure.DELEGATE_FIRST
@@ -118,33 +84,7 @@ publishing {
 					}
 				}
 			}
-
-			pom.withXml {
-				if (!project.ext.pomFile.exists()) {
-					writeTo(project.ext.pomFile)
-				}
-			}
 		}
-
-		gpgJars (MavenPublication) {
-			getPomSignatures().each {signature ->
-				artifact (signature.archive) {
-					classifier = signature.classifier
-					extension = signature.extension
-				}
-			}
-		}
-
-		gpgJars (MavenPublication) {
-			getJarsSignatures().each {signature ->
-				artifact (signature.archive) {
-					classifier = signature.classifier
-					extension = signature.extension
-				}
-			}
-		}
-
-		// TODO gpgPom
 	}
 
 	repositories {
