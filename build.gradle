@@ -33,7 +33,6 @@ repositories {
 
 dependencies {
 	testImplementation 'junit:junit:4.12'
-	implementation 'org.eclipse.jgit:org.eclipse.jgit:3.2.0.201312181205-r'
 }
 
 ext {
