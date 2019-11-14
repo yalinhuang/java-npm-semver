@@ -34,21 +34,8 @@ dependencies {
 	testImplementation 'junit:junit:4.12'
 }
 
-ext {
-	pomFile = file("${project.buildDir}/tmp/pom.xml")
-}
-
 configurations {
 	pom
-}
-
-artifacts {
-	archives jar
-	archives sourceJar
-	archives javadocJar
-	if (pomFile.exists()) {
-		pom pomFile
-	}
 }
 
 signing {
