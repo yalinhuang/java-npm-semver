@@ -53,7 +53,7 @@ artifacts {
 
 signing {
 	required {
-		if (publishToMavenLocal) {
+		if (gradle.taskGraph.hasTask("publishToMavenLocal")) {
 			System.console().printf "  [Disabled] Artifacts are not signed when published locally\n"
 			false
 		}
