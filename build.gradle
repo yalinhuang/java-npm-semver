@@ -63,16 +63,4 @@ publishing {
             }
         }
     }
-
-    repositories {
-        maven {
-            url 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-                        /*
-            credentials {
-                username = project['maven.sonatype.credentials.username']
-                password = project['maven.sonatype.credentials.password']
-            }
-                        */
-        }
-    }
 }
