@@ -9,11 +9,6 @@ plugins {
 
 apply plugin: 'java'
 apply plugin: 'signing'
-apply plugin: 'nebula.maven-publish'
-apply plugin: 'nebula.javadoc-jar'
-apply plugin: 'nebula.source-jar'
-apply plugin: "nebula.info"
-apply plugin: "nebula.contacts"
 
 sourceCompatibility = 1.8
 group = 'com.github.yalinhuang'
@@ -32,10 +27,6 @@ repositories {
 
 dependencies {
     testImplementation 'junit:junit:4.12'
-}
-
-configurations {
-    pom
 }
 
 signing {
