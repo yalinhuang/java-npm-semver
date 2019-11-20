@@ -1,10 +1,10 @@
 plugins {
-	id 'nebula.maven-publish' version '14.1.1'
-	id 'nebula.javadoc-jar' version '14.1.1'
-	id 'nebula.source-jar' version '14.1.1'
-	id 'nebula.info' version '5.2.0'
-	id 'nebula.contacts' version '5.1.0'
-	id 'nebula.release' version '13.0.0'
+    id 'nebula.maven-publish' version '14.1.1'
+    id 'nebula.javadoc-jar' version '14.1.1'
+    id 'nebula.source-jar' version '14.1.1'
+    id 'nebula.info' version '5.2.0'
+    id 'nebula.contacts' version '5.1.0'
+    id 'nebula.release' version '13.0.0'
 }
 
 apply plugin: 'java'
@@ -20,68 +20,68 @@ group = 'com.github.yalinhuang'
 description = 'SemVer implementation that matches npm’s'
 
 contacts {
-	'huangyl@gmail.com' {
-		moniker 'Ya-Lin Huang'
-		github 'yalinhuang'
-	}
+    'huangyl@gmail.com' {
+        moniker 'Ya-Lin Huang'
+        github 'yalinhuang'
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
 }
 
 configurations {
-	pom
+    pom
 }
 
 signing {
-	required {
-		if (gradle.taskGraph.hasTask("publishToMavenLocal")) {
-			System.console().printf "  [Disabled] Artifacts are not signed when published locally\n"
-			false
-		}
-		else {
-			def signingKey = findProperty("signingKey")
-			def signingPassword = findProperty("signingPassword")
-			useInMemoryPgpKeys(signingKey, signingPassword)
-			true
-		}
-	}
+    required {
+        if (gradle.taskGraph.hasTask("publishToMavenLocal")) {
+            System.console().printf "  [Disabled] Artifacts are not signed when published locally\n"
+            false
+        }
+        else {
+            def signingKey = findProperty("signingKey")
+            def signingPassword = findProperty("signingPassword")
+            useInMemoryPgpKeys(signingKey, signingPassword)
+            true
+        }
+    }
 
-	sign publishing.publications
+    sign publishing.publications
 }
 
 publishing {
-	publications {
-		nebula(MavenPublication) {
-			pom.withXml {
-				asNode().children().last() + {
-					resolveStrategy = Closure.DELEGATE_FIRST
-					licenses {
-						license {
-							name 'GNU Lesser General Public License, version 2.1'
-							url 'https://www.gnu.org/licenses/lgpl-2.1.html'
-							distribution 'repo'
-						}
-					}
-				}
-			}
-		}
-	}
+    publications {
+        nebula(MavenPublication) {
+            pom.withXml {
+                asNode().children().last() + {
+                    resolveStrategy = Closure.DELEGATE_FIRST
+                    licenses {
+                        license {
+                            name 'GNU Lesser General Public License, version 2.1'
+                            url 'https://www.gnu.org/licenses/lgpl-2.1.html'
+                            distribution 'repo'
+                        }
+                    }
+                }
+            }
+        }
+    }
 
-	repositories {
-		maven {
-			url 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+    repositories {
+        maven {
+            url 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
                         /*
-			credentials {
-				username = project['maven.sonatype.credentials.username']
-				password = project['maven.sonatype.credentials.password']
-			}
+            credentials {
+                username = project['maven.sonatype.credentials.username']
+                password = project['maven.sonatype.credentials.password']
+            }
                         */
-		}
-	}
+        }
+    }
 }
