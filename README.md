@@ -15,7 +15,7 @@ Available in the [Maven Central repository](https://search.maven.org/artifact/co
 <dependency>
   <groupId>com.github.yalinhuang</groupId>
   <artifactId>npm-semver</artifactId>
-  <version>1.1.2/version>
+  <version>1.1.2</version>
 </dependency>
 ```
 
