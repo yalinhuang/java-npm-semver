@@ -3,33 +3,26 @@ Java _npm_ SemVer
 
 This is a direct port [`node-semver`](https://github.com/npm/node-semver), great to have npm like semantics in a Java application.
 
-Pending Updates on this README
-------------------------------
-
-- [ ] Update link to Maven Central after release of v1.1.0
-- [ ] Update `groupId` and `version` in Maven/Gradle configuration
 
 Releases
 --------
 
-Available in the [Maven Central repository](http://search.maven.org/#artifactdetails%7Ccom.github.yuchi%7Cnpm-semver%7C1.0.0%7Cjar).
+Available in the [Maven Central repository](https://search.maven.org/artifact/com.github.yalinhuang/npm-semver/).
 
 #### Maven configuration
 
 ```xml
 <dependency>
-  <groupId>com.github.yuchi</groupId>
+  <groupId>com.github.yalinhuang</groupId>
   <artifactId>npm-semver</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.2/version>
 </dependency>
 ```
 
 #### Gradle configuration
 
 ```groovy
-compile group: "com.github.yuchi", name: "npm-semver", version: "1.0.0"
-// or
-compile "com.github.yuchi:npm-semver:1.0.0"
+implementation 'com.github.yalinhuang:npm-semver:1.1.2'
 ```
 
 
@@ -117,7 +110,6 @@ Build and Publishing
 --------------------
 
 This project has enabled continuous build on [Travis CI](https://travis-ci.com/yalinhuang/java-npm-semver).
-The project leverages Gradle and Nebula plug-ins for building, testing, and publishing.
 The build script is tracked under `gradle/buildViaTravis.sh` while a release is triggered by GIT tags.
 
 #### Unit testing
@@ -127,13 +119,26 @@ $ ./gradlew clean check
 
 #### Publish to local repository for integration testing
 ```console
-$ ./gradlew devSnapshot publishToMavenLocal
-
-> Configure project :
-Inferred project: npm-semver, version: 1.1.0-dev.11+9afcf6c
+$ ./gradlew publishToMavenLocal
 ...
+
+$ tree ~/.m2/repository/com/github/yalinhuang
+...
+└── npm-semver
+    ├── maven-metadata-local.xml
+    └── unspecified
+        ├── npm-semver-unspecified-javadoc.jar
+        ├── npm-semver-unspecified-sources.jar
+        ├── npm-semver-unspecified.jar
+        ├── npm-semver-unspecified.module
+        └── npm-semver-unspecified.pom
 ```
 
+Or use `pkgVersion` to setup the version:
+
+```
+$ ./gradlew -DpkgVersion='0.0.1-dev' publishToMavenLocal
+```
 
 License
 -------
