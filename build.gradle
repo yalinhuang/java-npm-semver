@@ -84,13 +84,11 @@ bintray {
                 sign = true
                 passphrase = System.getProperty('bintray.gpgPassphrase')
             }
-            /*
             mavenCentralSync {
                 sync = true
                 user = System.getProperty('sonatype.user')
                 password = System.getProperty('sonatype.password')
             }
-             */
         }
     }
 }
