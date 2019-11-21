@@ -82,6 +82,7 @@ bintray {
 
             gpg {
                 sign = true
+                passphrase = System.getProperty('bintray.gpgPassphrase')
             }
             /*
             mavenCentralSync {
