@@ -1,27 +1,19 @@
 plugins {
-    id 'nebula.maven-publish' version '14.1.1'
-    id 'nebula.javadoc-jar' version '14.1.1'
-    id 'nebula.source-jar' version '14.1.1'
-    id 'nebula.info' version '5.2.0'
-    id 'nebula.contacts' version '5.1.0'
-    id 'nebula.release' version '13.0.0'
+    id 'com.jfrog.bintray' version '1.8.4'
 }
 
-apply plugin: 'java'
+apply plugin: 'java-library'
+apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 sourceCompatibility = 1.8
 group = 'com.github.yalinhuang'
+version = System.getProperty('pkgVersion')
 description = 'SemVer implementation that matches npm’s'
-
-contacts {
-    'huangyl@gmail.com' {
-        moniker 'Ya-Lin Huang'
-        github 'yalinhuang'
-    }
-}
+def githubURL = 'https://github.com/yalinhuang/java-npm-semver'
 
 repositories {
+    jcenter()
     mavenCentral()
 }
 
@@ -31,13 +23,13 @@ dependencies {
 
 signing {
     required {
-        if (gradle.taskGraph.hasTask(":publishToMavenLocal")) {
+        if (gradle.taskGraph.hasTask(':publishToMavenLocal')) {
             System.console().printf "  [Disabled] Artifacts are not signed when published locally\n"
             false
         }
         else {
-            def signingKey = findProperty("signingKey")
-            def signingPassword = findProperty("signingPassword")
+            def signingKey = findProperty('signingKey')
+            def signingPassword = findProperty('signingPassword')
             useInMemoryPgpKeys(signingKey, signingPassword)
             true
         }
@@ -46,21 +38,76 @@ signing {
     sign publishing.publications
 }
 
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
 publishing {
+    repositories {
+        mavenLocal()
+    }
+
     publications {
-        nebula(MavenPublication) {
-            pom.withXml {
-                asNode().children().last() + {
-                    resolveStrategy = Closure.DELEGATE_FIRST
-                    licenses {
-                        license {
-                            name 'GNU Lesser General Public License, version 2.1'
-                            url 'https://www.gnu.org/licenses/lgpl-2.1.html'
-                            distribution 'repo'
-                        }
+        mavenPublication(MavenPublication) {
+            from components.java
+
+            artifactId project.name
+
+            pom {
+                name = "${project.group}:${project.name}"
+                description = project.description
+                url = githubURL
+
+                developers {
+                    developer {
+                        id = 'yalinhuang'
+                        name = 'Ya-Lin Huang'
+                        email = 'huangyl@gmail.com'
+                    }
+                }
+                scm {
+                    url = githubURL
+                }
+                licenses {
+                    license {
+                        name ='GNU Lesser General Public License, version 2.1'
+                        url = 'https://www.gnu.org/licenses/lgpl-2.1.html'
+                        distribution ='repo'
                     }
                 }
             }
         }
+    }
+}
+
+bintray {
+    user = System.getProperty('bintray.user')
+    key = System.getProperty('bintray.key')
+    publications = ['mavenPublication']
+
+    publish = true
+
+    pkg {
+        repo = 'lgpl-candidates'
+        name = project.name
+        licenses = ['LGPL-2.1']
+        vcsUrl = githubURL
+    }
+
+    version {
+        name = project.version
+        released = new Date()
+        gpg {
+            sign = true
+            passphrase = System.getProperty('bintray.gpgpassphrase')
+        }
+        /*
+        mavenCentralSync {
+            sync = true
+            user = System.getProperty('sonatype.user')
+            password = System.getProperty('sonatype.password')
+        }
+         */
     }
 }
