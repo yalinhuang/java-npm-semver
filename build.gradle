@@ -76,21 +76,20 @@ bintray {
         name = project.name
         licenses = ['LGPL-2.1']
         vcsUrl = githubURL
-    }
 
-    version {
-        name = project.version
-        released = new Date()
-        gpg {
-            sign = true
-            passphrase = System.getProperty('bintray.gpgpassphrase')
+        version {
+            released = new Date()
+
+            gpg {
+                sign = true
+            }
+            /*
+            mavenCentralSync {
+                sync = true
+                user = System.getProperty('sonatype.user')
+                password = System.getProperty('sonatype.password')
+            }
+             */
         }
-        /*
-        mavenCentralSync {
-            sync = true
-            user = System.getProperty('sonatype.user')
-            password = System.getProperty('sonatype.password')
-        }
-         */
     }
 }
