@@ -21,23 +21,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 }
 
-signing {
-    required {
-        if (gradle.taskGraph.hasTask(':publishToMavenLocal')) {
-            System.console().printf "  [Disabled] Artifacts are not signed when published locally\n"
-            false
-        }
-        else {
-            def signingKey = findProperty('signingKey')
-            def signingPassword = findProperty('signingPassword')
-            useInMemoryPgpKeys(signingKey, signingPassword)
-            true
-        }
-    }
-
-    sign publishing.publications
-}
-
 java {
     withJavadocJar()
     withSourcesJar()
