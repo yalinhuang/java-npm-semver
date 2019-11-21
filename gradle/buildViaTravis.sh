@@ -14,11 +14,11 @@ elif [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_TAG" == "" ]; then
 elif [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_TAG" != "" ]; then
   echo -e 'Build Branch for Release => Branch ['$TRAVIS_BRANCH']  Tag ['$TRAVIS_TAG']'
   case "$TRAVIS_TAG" in
-  *-rc\.*)
-    ./gradlew -Prelease.travisci=true -Psonatype.username=$sonatypeUsername -Psonatype.password=$sonatypePassword -Prelease.useLastTag=true candidate $SWITCHES
+  v.*)
+    ./gradlew -DpkgVersion="${$TRAVIS_TAG:1}" -Dbintray.user=$bintrayUser -Dbintray.key=$bintrayKey -Dbintray.gpgPassphrase=$gpgPassphrase -Dsonatype.user=$sonatypeUser -Dsonatype.password=$sonatypePassword bintrayUpload $SWITCHES
     ;;
   *)
-    ./gradlew -Prelease.travisci=true -Psonatype.username=$sonatypeUsername -Psonatype.password=$sonatypePassword -Prelease.useLastTag=true final $SWITCHES
+    ./gradlew build $SWITCHES
     ;;
   esac
 else
